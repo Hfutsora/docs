@@ -1,0 +1,7 @@
+.DS_Store
+.sass-cache
+node_modules
+components
+explorations
+test/vue.test.js
+test/vue.test-cov.js

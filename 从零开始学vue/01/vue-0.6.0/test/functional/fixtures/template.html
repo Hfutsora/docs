@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="utf-8">
+        <script src="../../../dist/vue.js"></script>
+    </head>
+    <body>
+
+        <div id="usa" v-partial="global"></div>
+        <div id="japan" v-partial="local"></div>
+
+        <script type="text/v-template" id="test">
+            <p>{{hi}}!</p>
+        </script>
+
+        <script>
+
+            // direct usage
+            var china  = new Vue({
+                id: 'china',
+                template: '#test'
+            })
+            document.body.appendChild(china.$el)
+            // setting value after compile also works,
+            // as long as it has appeared in the template
+            china.hi = '你好'
+
+            // extended usage
+            var Hawaii = Vue.extend({
+                id: 'hawaii',
+                template: '#test'
+            })
+            var hawaii = new Hawaii()
+            document.body.appendChild(hawaii.$el)
+            hawaii.hi = 'Aloha'
+
+            // global partial
+            Vue.partial('global', document.querySelector('#test').innerHTML)
+            var usa = new Vue({
+                el: '#usa'
+            })
+            usa.hi = 'Hi dude'
+
+            // direct partial
+            var japan = new Vue({
+                el: '#japan',
+                partials: {
+                    local: document.querySelector('#test').innerHTML
+                }
+            })
+            japan.hi = 'こんにちは'
+        </script>
+    </body>
+</html>

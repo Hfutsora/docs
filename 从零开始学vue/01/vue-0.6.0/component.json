@@ -1,0 +1,32 @@
+{
+    "name": "vue",
+    "version": "0.6.0",
+    "main": "src/main.js",
+    "description": "Data-driven View Models",
+    "keywords": ["mvvm", "framework", "data binding"],
+    "license": "MIT",
+    "scripts": [
+        "src/main.js",
+        "src/emitter.js",
+        "src/config.js",
+        "src/utils.js",
+        "src/compiler.js",
+        "src/viewmodel.js",
+        "src/binding.js",
+        "src/observer.js",
+        "src/directive.js",
+        "src/exp-parser.js",
+        "src/text-parser.js",
+        "src/deps-parser.js",
+        "src/filters.js",
+        "src/transition.js",
+        "src/directives/index.js",
+        "src/directives/if.js",
+        "src/directives/repeat.js",
+        "src/directives/on.js",
+        "src/directives/model.js"
+    ],
+    "dependencies": {
+        "component/emitter": "*"
+    }
+}
