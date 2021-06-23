@@ -38,7 +38,7 @@ module.exports {
 
 首先我们首先配置打包入口，根据 [entry](https://webpack.js.org/concepts/#entry) 说明，我们：
 
-```json
+```js
 {
   "entry": "./src/myInput.vue"
 }
@@ -48,7 +48,7 @@ module.exports {
 
 同理输出目录，根据 [output](https://webpack.js.org/configuration/output/) 配置为：
 
-```json
+```js
 {
   output: {
     filename: '[name].js',
@@ -70,7 +70,7 @@ npm i vue@next vue-loader@next @vue/compiler-sfc -D
 
 同时 插件([plugins](https://webpack.js.org/configuration/plugins/))我们需要搭配 `VueLoaderPlugin`。
 
-```json
+```js
 {
    plugins: [
     new VueLoaderPlugin()
@@ -100,7 +100,7 @@ npm i babel-loader -D
 
 准备完成后，我们要进行模块规则配置 (`module rules`)，及解析不同的内容我们要采用哪一个`loader`
 
-```json
+```js
 {
   module: {
     rules: [
@@ -164,7 +164,7 @@ files.forEach(function (filename) {
 
 因为正常打包时，`css` 会包含在 js 模块内部，会导致加载时间延长，所以我们希望将 `css` 内容打包时能单独分离出来，`webpack4` 我们使用 `mini-css-extract-plugin` 插件来实现。
 
-```json
+```js
 {
   output: {
     filename: '[name]/index.js',
@@ -258,7 +258,7 @@ const defaultConfig = {
     ]
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', 'json'],
+    extensions: ['.tsx', '.ts', '.js', 'js'],
   },
   plugins: [
     new VueLoaderPlugin(),
