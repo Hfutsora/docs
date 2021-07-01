@@ -195,6 +195,16 @@ files.forEach(function (filename) {
 
 可以阅读 [Webpack Plugin](https://webpack.docschina.org/plugins/html-webpack-plugin/) 获取更多遍历插件。
 
+
+
+增加 `ts-loader` 后，`build` 如果出现
+
+```cmd
+TypeError: loaderContext.getOptions is not a function
+```
+
+原因是 `ts-loader` 与 `webpack` 版本不匹配，在 `webpack4` 下请使用 `ts-loader@^8.2`。
+
 完整配置代码如下
 
 ```js
@@ -249,6 +259,17 @@ const defaultConfig = {
       {
         test: /\.(png|jpe?g|gif)$/i,
         use: ['file-loader'],
+      },
+       {
+        test: /\.(ts|tsx)?$/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              appendTsSuffixTo: [/.vue$/],
+            }
+          }
+        ],
       },
       {
         test: /\.js$/,
