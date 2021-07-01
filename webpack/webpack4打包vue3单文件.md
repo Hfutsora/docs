@@ -110,7 +110,7 @@ npm i babel-loader -D
       },
       {
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.css$/i,
