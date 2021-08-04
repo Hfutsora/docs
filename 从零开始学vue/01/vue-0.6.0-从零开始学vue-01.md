@@ -46,3 +46,38 @@ AST [抽象语法树](https://zh.wikipedia.org/wiki/%E6%8A%BD%E8%B1%A1%E8%AA%9E%
 
 我们知道每当操作 DOM 时，都会导致页面的 [重排或重绘](https://sites.google.com/site/getsnippet/javascript/dom/repaints-and-reflows-manipulating-the-dom-responsibly) 。为了减少浏览器性能开销，我们可以模仿真实的 dom 内部生成一个形状相同的语法树，当数据更新时我们先在语法树中去更新，当本轮数据修改结束后，我们将当前树与真实 dom 比较，只去更新发生变化的节点，减少重绘等发生的次数和规模。
 
+首先我们尝试将一个 template 字符串转换为真实节点
+
+```js
+function toFragment(tempalte) {
+  const node = document.createElement('div');
+  const frag = document.createDocumentFragment(); //  fragment 不会引起页面回流
+  let child = null;
+
+  node.innerHTML = tempalte.trim();
+
+  while(child = node.firstChild) {
+    frag.appendChild(child);
+  }
+
+  return frag;
+}
+
+// 在浏览器控制台执行查看 frag 内容
+console.log([toFragment('<div>hello world</div>')]);
+```
+
+然后我们使用该[文档片段](https://developer.mozilla.org/zh-CN/docs/Web/API/Document/createDocumentFragment)作为 tempalte 用来创建真实 dom 元素.
+
+```js
+function setupElement(tempalte) {
+  const el = document.createElement('div');
+
+  el.innerHTML = '';
+  el.appendChild(tempalte.cloneNode(true));
+
+  return el;
+}
+```
+
+此时我们已经根据 template 模板得到完整的节点树了
