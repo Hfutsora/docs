@@ -38,4 +38,11 @@ var config      = require('./config'),
 - `filters` 过滤器
 - `utils` 工具函数
 
+这里默认你已掌握 vue2 的基本语法，下面首先介绍 vue 是如何解析 `tempalte` 模板并且实现数据与视图的双向绑定。
+
+#### Compiler
+
+AST [抽象语法树](https://zh.wikipedia.org/wiki/%E6%8A%BD%E8%B1%A1%E8%AA%9E%E6%B3%95%E6%A8%B9)
+
+我们知道每当操作 DOM 时，都会导致页面的 [重排或重绘](https://sites.google.com/site/getsnippet/javascript/dom/repaints-and-reflows-manipulating-the-dom-responsibly) 。为了减少浏览器性能开销，我们可以模仿真实的 dom 内部生成一个形状相同的语法树，当数据更新时我们先在语法树中去更新，当本轮数据修改结束后，我们将当前树与真实 dom 比较，只去更新发生变化的节点，减少重绘等发生的次数和规模。
 
