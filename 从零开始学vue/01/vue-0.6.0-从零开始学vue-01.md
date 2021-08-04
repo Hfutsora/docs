@@ -33,7 +33,9 @@ var config      = require('./config'),
 其中
 
 - `config` vue 基础配置，包括属性前缀，开发模式，class等
-- `ViewModel` 
-
+- `ViewModel` 视图模型 （组件）
+- `directives` 指令
+- `filters` 过滤器
+- `utils` 工具函数
 
 
