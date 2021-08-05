@@ -1,8 +1,8 @@
 # 从零开始学 `vue`
 
-##  Chapter 1 `学习 vue-0.6.0`
+## Chapter 1 `学习 vue-0.6.0`
 
-> 本系列将从vue的 0.6.0 版本开始，从零构建我们自己的类vue简易版框架，该过程中我们将更加深入地学习 `vue` 框架内部实现，并对其中用到的某些知识点进行简单介绍，让我们能够更全面地认识这个框架。通过系统学习 `vue` 源码我们希望能提升自己的 `js` 水平，并在将来使用时，能有更好的框架理解，并且了解代码原理亦能有效避免在项目中踩很多不必要的坑。
+> 本系列将从 vue 的 0.6.0 版本开始，从零构建我们自己的类 vue 简易版框架，该过程中我们将更加深入地学习 `vue` 框架内部实现，并对其中用到的某些知识点进行简单介绍，让我们能够更全面地认识这个框架。通过系统学习 `vue` 源码我们希望能提升自己的 `js` 水平，并在将来使用时，能有更好的框架理解，并且了解代码原理亦能有效避免在项目中踩很多不必要的坑。
 
 ### 学习之前
 
@@ -14,7 +14,7 @@
 
 ### `vue-0.6.0` 源码解析
 
->  为什么是 `vue-0.6.0`?
+> 为什么是 `vue-0.6.0`?
 >
 > 最新的 vue 已经趋于完整，项目十分庞大，通过直接学习最初版本更有利于我们了解作者创造框架的初衷和学习最核心的实现机制，而不用花费大量精力在分辨代码上。
 
@@ -23,16 +23,16 @@
 在 `main.js` 中，这里首先引入了框架需要的依赖项及相关配置：
 
 ```js
-var config      = require('./config'),
-    ViewModel   = require('./viewmodel'),
-    directives  = require('./directives'),
-    filters     = require('./filters'),
-    utils       = require('./utils')
+var config = require('./config'),
+  ViewModel = require('./viewmodel'),
+  directives = require('./directives'),
+  filters = require('./filters'),
+  utils = require('./utils');
 ```
 
 其中
 
-- `config` vue 基础配置，包括属性前缀，开发模式，class等
+- `config` vue 基础配置，包括属性前缀，开发模式，class 等
 - `ViewModel` 视图模型 （组件）
 - `directives` 指令
 - `filters` 过滤器
@@ -48,7 +48,7 @@ AST [抽象语法树](https://zh.wikipedia.org/wiki/%E6%8A%BD%E8%B1%A1%E8%AA%9E%
 
 首先我们尝试将一个 template 字符串转换为真实节点
 
-```js
+```ts
 function toFragment(tempalte) {
   const node = document.createElement('div');
   const frag = document.createDocumentFragment(); //  fragment 不会引起页面回流
@@ -56,7 +56,7 @@ function toFragment(tempalte) {
 
   node.innerHTML = tempalte.trim();
 
-  while(child = node.firstChild) {
+  while ((child = node.firstChild)) {
     frag.appendChild(child);
   }
 
@@ -64,12 +64,12 @@ function toFragment(tempalte) {
 }
 
 // 在浏览器控制台执行查看 frag 内容
-console.log([toFragment('<div>hello world</div>')]);
+console.log([toFragment('<div>{{ message }}</div>')]);
 ```
 
 然后我们使用该[文档片段](https://developer.mozilla.org/zh-CN/docs/Web/API/Document/createDocumentFragment)作为 tempalte 用来创建真实 dom 元素.
 
-```js
+```ts
 function setupElement(tempalte) {
   const el = document.createElement('div');
 
@@ -80,4 +80,17 @@ function setupElement(tempalte) {
 }
 ```
 
-此时我们已经根据 template 模板得到完整的节点树了
+此时我们已经根据 template 模板得到完整的节点树了，但是此时的节点中 模板数据并没有进行转换，如 <div>{{ message }}</div> 你将只能看到一个 {{ message }} 而不是你希望的 message 此时的值。
+
+```ts
+/**
+ * compiler@v0.0.1
+ * 在之后的内容中，此 compiler 将会不断重构以完善功能，这里加上版本号进行区分
+ */
+class Compiler(options: {
+  template: string;
+  data: () => { [key: string]: any };
+}) {
+
+}
+```
