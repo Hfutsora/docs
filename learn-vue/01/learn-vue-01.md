@@ -80,7 +80,7 @@ function setupElement(tempalte) {
 }
 ```
 
-此时我们已经根据 template 模板得到完整的节点树了，但是此时的节点中 模板数据并没有进行转换，如 <div>{{ message }}</div> 你将只能看到一个 {{ message }} 而不是你希望的 message 此时的值。
+此时我们已经根据 template 模板得到完整的节点树了，但是此时的节点中 模板数据并没有进行转换，如 `<div>{{ message }}</div>` 你将只能看到一个 `{{ message }}` 而不是你希望的 `message` 在 `option.data` 中的值。
 
 ```ts
 interface CompilerOption = {
@@ -127,7 +127,7 @@ class Compiler {
     // 节点值使用了双括号语法
     if(rBracket.test(node.nodeValue)) {
       const match = node.nodeValue.match(rBracket)[1];
-      
+
     }
   }
 }
