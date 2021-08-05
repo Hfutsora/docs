@@ -48,7 +48,7 @@ AST [抽象语法树](https://zh.wikipedia.org/wiki/%E6%8A%BD%E8%B1%A1%E8%AA%9E%
 
 首先我们尝试将一个 template 字符串转换为真实节点
 
-```ts
+```js
 function toFragment(tempalte) {
   const node = document.createElement('div');
   const frag = document.createDocumentFragment(); //  fragment 不会引起页面回流
@@ -69,7 +69,7 @@ console.log([toFragment('<div>{{ message }}</div>')]);
 
 然后我们使用该[文档片段](https://developer.mozilla.org/zh-CN/docs/Web/API/Document/createDocumentFragment)作为 tempalte 用来创建真实 dom 元素.
 
-```ts
+```js
 function setupElement(tempalte) {
   const el = document.createElement('div');
 
@@ -83,14 +83,52 @@ function setupElement(tempalte) {
 此时我们已经根据 template 模板得到完整的节点树了，但是此时的节点中 模板数据并没有进行转换，如 <div>{{ message }}</div> 你将只能看到一个 {{ message }} 而不是你希望的 message 此时的值。
 
 ```ts
+interface CompilerOption = {
+  template: string;
+  data: () => { [key: string]: any };
+}
+```
+
+```js
 /**
  * compiler@v0.0.1
  * 在之后的内容中，此 compiler 将会不断重构以完善功能，这里加上版本号进行区分
  */
-class Compiler(options: {
-  template: string;
-  data: () => { [key: string]: any };
-}) {
+class Compiler {
+  option;
 
+  constructor(option) {
+    this.option = option;
+  }
+
+  /**
+   * @param node https://developer.mozilla.org/zh-CN/docs/Web/API/Node
+   */
+  compile(node, root) {
+    if (node.nodeType === 1) {
+      this.compileNode(node);
+    } else if (node.nodeType === 3) {
+      this.compileTextNode(node);
+    }
+  }
+
+  compileNode(node) {
+    if (node.childNodes.length) {
+      for (const childNode of node.childNodes) {
+        this.compile(childNode);
+      }
+    }
+  }
+
+  compileTextNode(node) {
+    const rBracket = /\{\{(.+?)\}\}/;
+    let token = null;
+
+    // 节点值使用了双括号语法
+    if(rBracket.test(node.nodeValue)) {
+      const match = node.nodeValue.match(rBracket)[1];
+      
+    }
+  }
 }
 ```
