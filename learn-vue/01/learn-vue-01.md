@@ -126,8 +126,24 @@ class Compiler {
 
     // 节点值使用了双括号语法
     if(rBracket.test(node.nodeValue)) {
+      // 获取双括号内容
       const match = node.nodeValue.match(rBracket)[1];
 
+      // 如 {{ value }} 处理后应该得到 data.value 对应的值
+      // 但是如果有 {{ user.name }} 这样的我们就需要在 data 内获取对象下属性值
+
+      let value;
+      const list = match.split('.');
+
+      while(list.length) {
+        const next = list.shift();
+
+        if(!value) {
+          value = this.options.data[next];
+        } else {
+          value = value[next];
+        }
+      }
     }
   }
 }
