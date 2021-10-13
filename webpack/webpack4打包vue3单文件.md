@@ -210,24 +210,28 @@ TypeError: loaderContext.getOptions is not a function
 ```js
 /**
  * webpack.config.js
+ * 
  * @author  hfutsora
  */
 
 const fs = require('fs');
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader')
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+
 
 let entries = {};
 
 const files = fs.readdirSync('./src')
 
 files.forEach(function (filename) {
-  let stat = fs.lstatSync("./src/" + filename)
+  let stat = fs.lstatSync('./src/' + filename)
   if (stat.isFile() === true) {
 
     const ext = path.extname(filename);
-    if (ext == ".vue") {
+    if (ext == '.vue') {
       const basename = path.basename(filename, ext);
       entries[basename] = `./src/${filename}`;
     }
@@ -239,14 +243,14 @@ const defaultConfig = {
   output: {
     filename: '[name]/index.js',
     path: path.resolve(__dirname, './dist'),
-    library: '[name]'
+    library: '[name]',
   },
-  mode: "production",
+  mode: 'production',
   module: {
     rules: [
       {
         test: /\.vue$/,
-        use: ['vue-loader']
+        use: ['vue-loader'],
       },
       {
         test: /\.scss$/,
@@ -258,11 +262,21 @@ const defaultConfig = {
       },
       {
         test: /\.(png|jpe?g|gif)$/i,
-        use: ['file-loader'],
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+            useRelativePath: true,
+            outputPath: 'assets',
+            publicPath: 'extends/components/assets',
+          }
+        }],
+        
       },
-       {
-        test: /\.(ts|tsx)?$/,
+      {
+        test: /\.ts|\.tsx$/,
         use: [
+          'babel-loader',
           {
             loader: 'ts-loader',
             options: {
@@ -272,24 +286,31 @@ const defaultConfig = {
         ],
       },
       {
-        test: /\.js$/,
+        test: /\.js(x)*$/,
         exclude: /node_modules/,
         use: ['babel-loader']
       }
     ]
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', 'js'],
+    extensions: ['.vue', '.js', '.jpg', '.png'],
+    alias: {
+      vue$: path.resolve(__dirname, 'node_modules/vue/dist/vue.esm-bundler.js')
+    },
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin(
       {
         filename: './[name]/index.css'
-      }),
-  ]
+      })
+  ],
+
+  externals: {
+    vue: "Vue"
+  }
 }
 
-module.exports = Object.assign(defaultConfig, { entry: entries })
-
+module.exports = Object.assign(defaultConfig, { entry: entries });
 ```
