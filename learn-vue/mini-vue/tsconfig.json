@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "outFile": "./built/mini-vue.js",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "declaration": true,
+    "outDir": "./built",
+  }
+}

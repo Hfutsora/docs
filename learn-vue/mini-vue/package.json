@@ -1,0 +1,11 @@
+{
+  "name": "mini-vue",
+  "version": "1.0.0",
+  "description": "",
+  "main": "vue.js",
+  "scripts": {
+    "build": "tsc --watch"
+  },
+  "author": "hfutsora",
+  "license": "ISC"
+}
