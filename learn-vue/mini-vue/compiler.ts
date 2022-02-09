@@ -3,38 +3,48 @@ interface VM {}
 interface CompilerOptions {
   el: string | HTMLElement;
   template: DocumentFragment;
-  data: () => { [key: string]: any };
+  data: () => { [key: string | number]: any };
+  mounted?: () => void;
 }
 
 class Compiler {
   protected _init: boolean;
-  protected vm: VM;
-  protected options: CompilerOptions;
-  protected el: Element;
+  protected _vm: VM;
+  protected $options: CompilerOptions;
+  protected $el: Element;
 
   constructor(vm: VM, options: CompilerOptions) {
     this._init = false;
-    this.vm = vm;
-    this.options = options || Object.create(null);
+    this._vm = vm;
+    this.$options = options || Object.create(null);
 
-    this.render();
+    this.$render();
   }
 
-  render() {
+  $render() {
     this._init = true;
 
-    this.options.template = toFragment(this.options.template);
+    this.$options.template = toFragment(this.$options.template);
 
-    this.el = this.setupElement(this.options);
+    for(const key in this.$options.data()) {
+      this.$createBinding(key);
+    }
 
-    this.compile(this.el, true);
+    this.$update();
 
     this._init = false;
+
+    this.$options.mounted?.call(this);
   }
 
-  setupElement(options: CompilerOptions) {
+  $update() {
+    this.$el = this.$setupElement(this.$options);
+    this.$compile(this.$el, true);
+  }
+
+  $setupElement(options: CompilerOptions) {
     // create the node first
-    const el = (this.el =
+    const el = (this.$el =
       typeof options.el === 'string'
         ? document.querySelector(options.el)
         : options.el || document.createElement('div'));
@@ -48,10 +58,26 @@ class Compiler {
     return el;
   }
 
+  $createBinding(key: string | number) {
+    let value = this.$options.data()[key];
+    this[key] = value;
+
+    Object.defineProperty(this, key, {
+      enumerable: true,
+      get: () => {
+        return value;
+      },
+      set: (newVal) => {
+        value = newVal;
+        this.$update();
+      }
+    });
+  }
+
   /**
    * Compile dom node in recursive
    */
-  compile(node: ChildNode, root = false) {
+  $compile(node: ChildNode, root = false) {
     const parse = (text: string): string => {
       const BINDING_RE = /\{\{(.+?)\}\}/;
 
@@ -69,7 +95,7 @@ class Compiler {
 
       return tokens
         .map(token =>
-          typeof token === 'string' ? token : this.options.data()[token.key]
+          typeof token === 'string' ? token : this[token.key]
         )
         .join('');
     };
@@ -77,7 +103,7 @@ class Compiler {
     if (node.nodeType === 1) {
       if (node.childNodes?.length) {
         for (let i = 0; i < node.childNodes?.length; i++) {
-          this.compile(node.childNodes[i]);
+          this.$compile(node.childNodes[i]);
         }
       }
     } else if (node.nodeType === 3) {

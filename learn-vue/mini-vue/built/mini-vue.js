@@ -1,20 +1,28 @@
 var Compiler = /** @class */ (function () {
     function Compiler(vm, options) {
         this._init = false;
-        this.vm = vm;
-        this.options = options || Object.create(null);
-        this.render();
+        this._vm = vm;
+        this.$options = options || Object.create(null);
+        this.$render();
     }
-    Compiler.prototype.render = function () {
+    Compiler.prototype.$render = function () {
+        var _a;
         this._init = true;
-        this.options.template = toFragment(this.options.template);
-        this.el = this.setupElement(this.options);
-        this.compile(this.el, true);
+        this.$options.template = toFragment(this.$options.template);
+        for (var key in this.$options.data()) {
+            this.$createBinding(key);
+        }
+        this.$update();
         this._init = false;
+        (_a = this.$options.mounted) === null || _a === void 0 ? void 0 : _a.call(this);
     };
-    Compiler.prototype.setupElement = function (options) {
+    Compiler.prototype.$update = function () {
+        this.$el = this.$setupElement(this.$options);
+        this.$compile(this.$el, true);
+    };
+    Compiler.prototype.$setupElement = function (options) {
         // create the node first
-        var el = (this.el =
+        var el = (this.$el =
             typeof options.el === 'string'
                 ? document.querySelector(options.el)
                 : options.el || document.createElement('div'));
@@ -25,10 +33,25 @@ var Compiler = /** @class */ (function () {
         }
         return el;
     };
+    Compiler.prototype.$createBinding = function (key) {
+        var _this = this;
+        var value = this.$options.data()[key];
+        this[key] = value;
+        Object.defineProperty(this, key, {
+            enumerable: true,
+            get: function () {
+                return value;
+            },
+            set: function (newVal) {
+                value = newVal;
+                _this.$update();
+            }
+        });
+    };
     /**
      * Compile dom node in recursive
      */
-    Compiler.prototype.compile = function (node, root) {
+    Compiler.prototype.$compile = function (node, root) {
         var _this = this;
         var _a, _b;
         if (root === void 0) { root = false; }
@@ -50,14 +73,14 @@ var Compiler = /** @class */ (function () {
                 tokens.push(text);
             return tokens
                 .map(function (token) {
-                return typeof token === 'string' ? token : _this.options.data()[token.key];
+                return typeof token === 'string' ? token : _this[token.key];
             })
                 .join('');
         };
         if (node.nodeType === 1) {
             if ((_a = node.childNodes) === null || _a === void 0 ? void 0 : _a.length) {
                 for (var i = 0; i < ((_b = node.childNodes) === null || _b === void 0 ? void 0 : _b.length); i++) {
-                    this.compile(node.childNodes[i]);
+                    this.$compile(node.childNodes[i]);
                 }
             }
         }
