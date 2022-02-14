@@ -11,24 +11,35 @@
 <body>
   <div id="app"></div>
 
+  <button id="btn">click me</button>
+
   <script src="./built/mini-vue.js"></script>
   <script>
-    const vue = new Compiler({}, {
-      el: '#app',
-      template: '<div style="font-size: 16px; text-align: center;">plain text {{ content }}</div>',
-      data() {
-        return {
-          content: 'hello world',
-        }
-      },
-      mounted() {
-        setTimeout(() => {
-          this.content = 'update content';
-        }, 2000);
-      }
-    });
+    // const vue = new Compiler({}, {
+    //   el: '#app',
+    //   template: '<div style="font-size: 16px; text-align: center;">plain text {{ content }}</div>',
+    //   data() {
+    //     return {
+    //       content: 'hello world',
+    //     }
+    //   },
+    //   mounted() {
+    //     setTimeout(() => {
+    //       this.content = 'update content';
+    //     }, 2000);
+    //   }
+    // });
 
-    window.vue = vue;
+    // window.vue = vue;
+
+    var ele = document.querySelector('#app');
+    var myVue = new MyVue({
+        msg: 'Hello world'
+    }, ele, 'msg');
+
+    btn.onclick = function(){
+        myVue.msg = myVue.msg == 'Hello world' ? '你好，世界' : 'Hello world';
+    }
   </script>
 </body>
 

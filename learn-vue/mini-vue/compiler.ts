@@ -59,19 +59,7 @@ class Compiler {
   }
 
   $createBinding(key: string | number) {
-    let value = this.$options.data()[key];
-    this[key] = value;
-
-    Object.defineProperty(this, key, {
-      enumerable: true,
-      get: () => {
-        return value;
-      },
-      set: (newVal) => {
-        value = newVal;
-        this.$update();
-      }
-    });
+    observe(this);
   }
 
   /**
