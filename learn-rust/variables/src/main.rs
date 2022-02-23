@@ -47,6 +47,49 @@ fn main() {
     } else {
         println!("else");
     }
+
+    let a = if true {
+        6
+    } else {
+        7
+    };
+
+    println!("a is {}", a);
+
+    let mut counter = 0;
+
+    let result = loop {
+        counter += 1;
+
+        if counter == 10 {
+            break counter * 2;
+        }
+    };
+
+    println!("The result is {}", result);
+
+    let mut number = 3;
+
+    while number != 0 {
+        println!("{}!", number);
+
+        number = number - 1;
+    }
+
+    println!("LIFTOFF!!!");
+
+
+    for element in 1..10 {
+        println!("the value is: {}", element);
+    }
+
+    // Ownership
+    let mut s1 = String::from("hello"); // heap string
+    s1.push_str(", world");
+    let s2 = s1; // move
+    let s3 = s2.clone(); // clone
+
+    println!("{}, {}", s2, s3);
 }
 
 fn another_func(x: u32) -> u32 {
