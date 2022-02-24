@@ -90,9 +90,41 @@ fn main() {
     let s3 = s2.clone(); // clone
 
     println!("{}, {}", s2, s3);
+
+    let mut s4 = String::from("hello world");
+    let mut s5 = String::from("world");
+
+    // let r1 = &mut s4;
+    // let r2 = &mut s4; // data race
+
+    // println!("{}, {}", r1, r2);
+    
+    println!("{}", calculate_length(&mut s4, &mut s5)); // reference 使用值但不获取其所有权
+    println!("{}", calculate_length(&mut s5, &mut s4));
+
+    println!("{}, {}", s4, s5);
+
+    let word = first_word(&s4);
+    println!("{}", word);
 }
 
-fn another_func(x: u32) -> u32 {
 
+fn another_func(x: u32) -> u32 {
     x + 1
+}
+
+fn calculate_length(s: &mut String, s2: &mut String) -> usize { // borrowing 借用
+    s.len() + s2.len()
+}
+
+fn first_word(s: &str) -> &str {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
+    }
+
+    &s[..]
 }
