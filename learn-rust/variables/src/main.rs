@@ -1,3 +1,5 @@
+use std::vec;
+
 fn main() {
     let mut x = 5;
 
@@ -106,6 +108,27 @@ fn main() {
 
     let word = first_word(&s4);
     println!("{}", word);
+
+    let mut v = vec![1, 2, 3];
+    v.push(1);
+    v.push(2);
+
+    let third = &v[2];
+    println!("The third element is {}", third);
+
+    let fourth = v.get(3);
+    match fourth {
+        Some(fourth) => println!("The fourth element is {}", fourth),
+        None => println!("There is no fourth element."),
+    }
+
+    for i in &v {
+        println!("{}", i);
+    }
+
+    for i in &mut v {
+        *i += 50; // 解引用运算符*
+    }
 }
 
 
