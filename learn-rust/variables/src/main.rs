@@ -1,4 +1,6 @@
+use std::fs::File;
 use std::vec;
+use std::collections::HashMap;
 
 fn main() {
     let mut x = 5;
@@ -129,6 +131,47 @@ fn main() {
     for i in &mut v {
         *i += 50; // 解引用运算符*
     }
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+
+    
+    let teams  = vec![String::from("Blue"), String::from("Yellow")];
+    let initial_scores = vec![10, 50];
+
+    let mut scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect();
+
+    let field_name = String::from("Orange");
+    let field_value = 10;
+    scores.entry(&field_name).or_insert(&field_value);
+
+    for (key, value) in &scores {
+        println!("{}: {}", key, value);
+    }
+
+    let text = "hello world wonderful world";
+
+    let mut map = HashMap::new();
+
+    for word in text.split_whitespace() {
+        let count = map.entry(word).or_insert(0); // return &mut v
+        *count += 1;
+    }
+
+    for (key, value) in &map {
+        println!("{}: {}", key, value);
+    }
+
+    let f = File::open("hello.txt");
+
+    match f {
+        Ok(file) => file,
+        Err(error) => {
+            panic!("Problem opening the file: {:?}", error)
+        },
+    };
 }
 
 
