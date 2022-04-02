@@ -1,6 +1,6 @@
-use std::fs::File;
-use std::vec;
 use std::collections::HashMap;
+// use std::fs::File;
+use std::vec;
 
 fn main() {
     let mut x = 5;
@@ -10,16 +10,15 @@ fn main() {
     x = 6;
 
     println!("x is {}.", x);
-    
 
-    // scalar 标量 
+    // scalar 标量
     // 整型、浮点型、布尔类型和字符类型
     let num: i32 = 1_000;
 
     println!("num {}", num);
 
     let boo: bool = true;
-    
+
     println!("boo {}", boo);
 
     let c = 'c'; // char 字符类型 4 byte
@@ -32,7 +31,7 @@ fn main() {
     let (x, y) = tup;
     println!("tup {}, {}", x, y);
 
-    let arr: [u32; 5] = [1 ,2, 3,4,5];
+    let arr: [u32; 5] = [1, 2, 3, 4, 5];
     println!("arr {}", arr.len());
 
     let y = {
@@ -52,11 +51,7 @@ fn main() {
         println!("else");
     }
 
-    let a = if true {
-        6
-    } else {
-        7
-    };
+    let a = if true { 6 } else { 7 };
 
     println!("a is {}", a);
 
@@ -82,7 +77,6 @@ fn main() {
 
     println!("LIFTOFF!!!");
 
-
     for element in 1..10 {
         println!("the value is: {}", element);
     }
@@ -102,7 +96,7 @@ fn main() {
     // let r2 = &mut s4; // data race
 
     // println!("{}, {}", r1, r2);
-    
+
     println!("{}", calculate_length(&mut s4, &mut s5)); // reference 使用值但不获取其所有权
     println!("{}", calculate_length(&mut s5, &mut s4));
 
@@ -137,8 +131,7 @@ fn main() {
     scores.insert(String::from("Blue"), 10);
     scores.insert(String::from("Yellow"), 50);
 
-    
-    let teams  = vec![String::from("Blue"), String::from("Yellow")];
+    let teams = vec![String::from("Blue"), String::from("Yellow")];
     let initial_scores = vec![10, 50];
 
     let mut scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect();
@@ -164,22 +157,42 @@ fn main() {
         println!("{}: {}", key, value);
     }
 
-    let f = File::open("hello.txt");
+    // let f = File::open("hello.txt");
 
-    match f {
-        Ok(file) => file,
-        Err(error) => {
-            panic!("Problem opening the file: {:?}", error)
-        },
+    // match f {
+    //     Ok(file) => file,
+    //     Err(error) => {
+    //         panic!("Problem opening the file: {:?}", error)
+    //     }
+    // };
+
+    let tweet = Tweet {
+        username: String::from("horse_ebooks"),
+        content: String::from("of course, as you probably already know, people"),
+        reply: false,
+        retweet: false,
     };
-}
 
+    println!("new tweet: {}", tweet.summarize());
+
+    notify(tweet);
+
+
+    let r = 2;
+
+    {
+        let x = &r;
+        println!("x: {}", x);
+    }
+
+}
 
 fn another_func(x: u32) -> u32 {
     x + 1
 }
 
-fn calculate_length(s: &mut String, s2: &mut String) -> usize { // borrowing 借用
+fn calculate_length(s: &mut String, s2: &mut String) -> usize {
+    // borrowing 借用
     s.len() + s2.len()
 }
 
@@ -193,4 +206,55 @@ fn first_word(s: &str) -> &str {
     }
 
     &s[..]
+}
+
+pub trait Summary {
+    fn summarize(&self) -> String {
+        String::from("(Read more...)")
+    }
+}
+
+pub fn notify(item: impl Summary) {
+    println!("Breaking news! {}", item.summarize());
+}
+
+pub fn notify2<T>(item: T, item2: T)
+where
+    T: Summary,
+{
+    println!("Breaking news! {}, {}", item.summarize(), item2.summarize());
+}
+
+pub struct NewsArticle {
+    pub headline: String,
+    pub location: String,
+    pub author: String,
+    pub content: String,
+}
+
+impl Summary for NewsArticle {
+    fn summarize(&self) -> String {
+        format!("{}, by {} ({})", self.headline, self.author, self.location)
+    }
+}
+
+pub struct Tweet {
+    pub username: String,
+    pub content: String,
+    pub reply: bool,
+    pub retweet: bool,
+}
+
+impl Summary for Tweet {
+    fn summarize(&self) -> String {
+        format!("{}: {}", self.username, self.content)
+    }
+}
+
+fn larger<'a>(x: &'a i32, y: &'a i32) -> &'a i32 {
+    if x > y {
+        x
+    } else {
+        y
+    }
 }
