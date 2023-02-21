@@ -1,0 +1,11 @@
+{
+  "name": "parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test:lexer1": "tsx ./lexer1.ts"
+  },
+  "author": "",
+  "license": "ISC"
+}
