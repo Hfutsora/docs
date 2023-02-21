@@ -1,4 +1,4 @@
-class Token {
+export class Token {
   type: number
   text: string
 
@@ -12,7 +12,7 @@ class Token {
   }
 }
 
-abstract class Lexer {
+export abstract class Lexer {
   static EOF: string = String.fromCharCode(-1)
   static EOF_TYPE = 1
 
@@ -46,7 +46,7 @@ abstract class Lexer {
   abstract getTokenName(tokenType: number): string
 }
 
-class ListLexer extends Lexer {
+export class ListLexer extends Lexer {
   static NAME = 2
   static COMMA = 3
   static LBRACK = 4

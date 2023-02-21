@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:lexer1": "tsx ./lexer1.ts"
+    "test:lexer1": "tsx ./lexer1.ts",
+    "text:parser1": "tsx ./parser1.ts"
   },
   "author": "",
   "license": "ISC"
