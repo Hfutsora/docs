@@ -114,15 +114,15 @@ export class ListLexer extends Lexer {
 }
 
 // test
-const input = '[hello, world]'
-const lexer = new ListLexer(input)
+// const input = '[hello, world]'
+// const lexer = new ListLexer(input)
 
-while(true) {
-  let nt = lexer.nextToken()
-  if(nt.type !== Lexer.EOF_TYPE) {
-    console.log(nt.toString())
-  } else {
-    break
-  }
-}
+// while(true) {
+//   let nt = lexer.nextToken()
+//   if(nt.type !== Lexer.EOF_TYPE) {
+//     console.log(nt.toString())
+//   } else {
+//     break
+//   }
+// }
 

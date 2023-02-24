@@ -51,13 +51,13 @@ export class ListParser extends Parser {
 }
 
 // test
-let l1 = "[hello, world]"
-let l2 = "[a, [b, [c, d]]]"
+// let l1 = "[hello, world]"
+// let l2 = "[a, [b, [c, d]]]"
 
-const lexer1 = new ListLexer(l1)
-const parser1 = new ListParser(lexer1)
-parser1.list()
+// const lexer1 = new ListLexer(l1)
+// const parser1 = new ListParser(lexer1)
+// parser1.list()
 
-const lexer2 = new ListLexer(l2)
-const parser2 = new ListParser(lexer2)
-parser2.list()
+// const lexer2 = new ListLexer(l2)
+// const parser2 = new ListParser(lexer2)
+// parser2.list()
